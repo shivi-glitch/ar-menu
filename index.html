@@ -98,7 +98,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: clamp(24px, 5vh, 40px);
+      gap: clamp(16px, 3vh, 24px);
       flex: 1;
       justify-content: center;
       max-height: 60vh;
@@ -113,8 +113,8 @@
     }
 
     .video-container {
-      width: min(85vw, 320px);
-      height: min(85vw, 320px);
+      width: min(75vw, 280px);
+      height: min(75vw, 280px);
       position: relative;
       overflow: hidden;
       flex-shrink: 0;
@@ -177,7 +177,7 @@
     }
 
     .fact-item {
-      font-size: clamp(14px, 3vh, 16px);
+      font-size: clamp(12px, 2.5vh, 14px);
       line-height: 1.5;
       color: rgba(255, 255, 255, 0.85);
       opacity: 0;
@@ -376,8 +376,8 @@
       }
 
       .video-container {
-        width: min(80vw, 280px);
-        height: min(80vw, 280px);
+        width: min(70vw, 240px);
+        height: min(70vw, 240px);
       }
 
       .dish-title {
@@ -385,14 +385,14 @@
       }
 
       .fact-item {
-        font-size: clamp(12px, 2.5vh, 14px);
+        font-size: clamp(11px, 2vh, 13px);
       }
     }
 
     @media screen and (max-height: 600px) {
       .video-container {
-        width: min(75vw, 240px);
-        height: min(75vw, 240px);
+        width: min(65vw, 200px);
+        height: min(65vw, 200px);
       }
     }
   </style>
@@ -453,10 +453,11 @@
     </div>
   </div>
 
-  <!-- AR Engine (Pre-loaded but hidden) -->
-  <model-viewer src="dish_scaled.glb" ar ar-modes="webxr quick-look scene-viewer" ar-placement="floor" ar-scale="fixed"
-    loading="eager" reveal="auto" exposure="1.0" shadow-intensity="0" shadow-softness="0" environment-image="neutral"
-    tone-mapping="commerce" touch-action="none" interaction-prompt="none" disable-tap disable-environment-image
+  <!-- AR Engine (Pre-loaded but hidden) - FIXED VERSION -->
+  <model-viewer src="dish_scaled.glb" ar ar-modes="webxr scene-viewer quick-look" ar-placement="floor" ar-scale="auto"
+    loading="eager" reveal="auto" exposure="1.0" shadow-intensity="0.3" shadow-softness="0.5"
+    environment-image="neutral" tone-mapping="commerce" interaction-prompt="auto" interaction-prompt-threshold="500"
+    touch-action="pan-y" disable-environment-image
     style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none;">
   </model-viewer>
 
