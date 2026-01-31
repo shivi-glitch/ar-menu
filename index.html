@@ -21,11 +21,11 @@
       box-sizing: border-box;
     }
 
-    html,
-    body {
+    html {
       height: 100%;
       width: 100%;
-      overflow-x: hidden;
+      overflow: hidden;
+      position: fixed;
     }
 
     body {
@@ -33,13 +33,19 @@
       font-family: 'Poppins', sans-serif;
       color: white;
       height: 100vh;
+      height: 100dvh;
       width: 100vw;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
+      padding: 0;
       overflow: hidden;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
     }
 
     .main-container {
@@ -47,14 +53,15 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: clamp(30px, 6vh, 80px);
+      gap: clamp(20px, 4vh, 40px);
       width: 100%;
       max-width: 428px;
+      height: 100%;
+      padding: clamp(20px, 3vh, 40px) 20px;
     }
 
     .dish-header {
       width: 100%;
-      padding: 16px 16px;
       display: flex;
       justify-content: center;
       z-index: 10;
@@ -73,7 +80,7 @@
     }
 
     .dish-title {
-      font-size: clamp(16px, 4vh, 22px);
+      font-size: clamp(18px, 4.5vh, 24px);
       font-weight: 800;
       letter-spacing: -0.5px;
       font-family: 'Comic Sans MS', 'Comic Sans', cursive;
@@ -82,14 +89,7 @@
       background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 0;
-    }
-
-    .dish-subtitle {
-      font-size: 12px;
-      color: #a78bfa;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 2px;
+      white-space: nowrap;
     }
 
     /* Container for Video and Facts Group */
@@ -98,7 +98,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: clamp(16px, 3vh, 24px);
+      flex: 1;
+      justify-content: center;
+      max-height: 60vh;
     }
 
     .video-section {
@@ -110,8 +113,8 @@
     }
 
     .video-container {
-      width: min(80vw, 300px);
-      height: min(80vw, 300px);
+      width: min(75vw, 280px);
+      height: min(75vw, 280px);
       position: relative;
       overflow: hidden;
       flex-shrink: 0;
@@ -164,18 +167,18 @@
       padding: 0;
       width: 100%;
       flex-shrink: 0;
-      height: 60px;
-      /* Fixed height for consistent spacing */
+      min-height: 50px;
     }
 
     .fact-container {
       text-align: center;
       max-width: 340px;
+      padding: 0 16px;
     }
 
     .fact-item {
-      font-size: clamp(11px, 2.5vh, 14px);
-      line-height: 1.6;
+      font-size: clamp(12px, 2.5vh, 14px);
+      line-height: 1.5;
       color: rgba(255, 255, 255, 0.85);
       opacity: 0;
       animation: factFade 3s ease-in-out infinite;
@@ -192,6 +195,7 @@
       border-radius: 50%;
       margin-right: 10px;
       flex-shrink: 0;
+      margin-top: 4px;
     }
 
     .fact-text {
@@ -223,7 +227,7 @@
     /* Loading & AR Button Container Area */
     .bottom-action-section {
       width: 100%;
-      height: 100px;
+      min-height: 80px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -243,7 +247,7 @@
     }
 
     .progress-label {
-      font-size: 13px;
+      font-size: clamp(12px, 2.5vh, 13px);
       color: rgba(255, 255, 255, 0.6);
       text-align: center;
       margin-bottom: 12px;
@@ -267,7 +271,7 @@
     }
 
     .progress-text {
-      font-size: 12px;
+      font-size: clamp(11px, 2.5vh, 12px);
       color: rgba(255, 255, 255, 0.5);
       text-align: center;
       margin-top: 8px;
@@ -283,8 +287,8 @@
     }
 
     .ar-glass-btn {
-      padding: clamp(12px, 3vh, 18px) clamp(30px, 8vw, 45px);
-      font-size: clamp(13px, 3vh, 16px);
+      padding: clamp(14px, 3vh, 18px) clamp(36px, 8vw, 50px);
+      font-size: clamp(14px, 3vh, 16px);
       font-weight: 800;
       color: #fff;
       text-align: center;
@@ -322,19 +326,8 @@
       }
     }
 
-    .ar-glass-btn:hover {
-      transform: scale(1.03) translateY(-4px);
-      box-shadow:
-        0 20px 60px rgba(124, 58, 237, 0.5),
-        0 0 80px rgba(6, 182, 212, 0.3);
-    }
-
     .ar-glass-btn:active {
       transform: scale(0.97);
-    }
-
-    .ar-icon {
-      font-size: 24px;
     }
 
     /* Hidden model-viewer */
@@ -375,55 +368,31 @@
       }
     }
 
-    /* Loading Screen Overlay - shown while loading */
-    #loading-overlay {
-      transition: opacity 0.4s ease;
-    }
-
-    #loading-overlay.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    /* Mobile Optimizations */
-    @media screen and (max-width: 428px) {
-      .dish-title {
-        font-size: 26px;
-      }
-
-      .dish-glass-container {
-        padding: 14px 28px;
+    /* Small screen adjustments */
+    @media screen and (max-height: 700px) {
+      .main-container {
+        gap: clamp(12px, 2vh, 20px);
+        padding: clamp(16px, 2vh, 24px) 16px;
       }
 
       .video-container {
-        height: 38vh;
+        width: min(70vw, 240px);
+        height: min(70vw, 240px);
       }
 
-      .facts-section {
-        padding: 20px 16px;
+      .dish-title {
+        font-size: clamp(16px, 4vh, 20px);
       }
 
       .fact-item {
-        font-size: 15px;
+        font-size: clamp(11px, 2vh, 13px);
       }
     }
 
-    @media screen and (max-width: 375px) {
-      .dish-title {
-        font-size: 24px;
-      }
-
-      .dish-glass-container {
-        padding: 12px 24px;
-      }
-
+    @media screen and (max-height: 600px) {
       .video-container {
-        height: 35vh;
-      }
-
-      .ar-glass-btn {
-        padding: 18px 40px;
-        font-size: 16px;
+        width: min(65vw, 200px);
+        height: min(65vw, 200px);
       }
     }
   </style>
@@ -493,7 +462,7 @@
 
   <!-- Desktop Message -->
   <div class="desktop-message" id="desktop-message">
-    <div style="font-weight: 800; color: #a78bfa; margin-bottom: 10px; font-size: 16px;">Phone Recommended</div>
+    <div style="font-weight: 800; color: #a78bfa; margin-bottom: 10px; font-size: 16px;">📱 Phone Recommended</div>
     <div style="font-size: 14px; opacity: 0.85; line-height: 1.5;">Open this link on your smartphone to view the dish in
       AR on your table.</div>
   </div>
