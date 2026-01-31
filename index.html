@@ -92,7 +92,6 @@
       white-space: nowrap;
     }
 
-    /* Container for Video and Facts Group */
     .video-facts-section {
       width: 100%;
       display: flex;
@@ -159,7 +158,6 @@
       border-radius: 16px;
     }
 
-    /* Facts Section */
     .facts-section {
       display: flex;
       align-items: center;
@@ -224,7 +222,6 @@
       }
     }
 
-    /* Loading & AR Button Container Area */
     .bottom-action-section {
       width: 100%;
       min-height: 80px;
@@ -278,7 +275,6 @@
       font-weight: 600;
     }
 
-    /* AR Button */
     .ar-button-container {
       width: 100%;
       display: flex;
@@ -330,7 +326,6 @@
       transform: scale(0.97);
     }
 
-    /* Hidden model-viewer */
     model-viewer {
       width: 1px;
       height: 1px;
@@ -339,7 +334,6 @@
       pointer-events: none;
     }
 
-    /* Desktop Message */
     .desktop-message {
       position: fixed;
       bottom: 100px;
@@ -368,6 +362,156 @@
       }
     }
 
+    /* AR Tutorial Cards */
+    .ar-tutorial-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .ar-tutorial-overlay.active {
+      display: flex;
+    }
+
+    .tutorial-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 32px 24px;
+      max-width: 360px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      animation: cardSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+
+    @keyframes cardSlideIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9) translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .tutorial-step {
+      display: none;
+    }
+
+    .tutorial-step.active {
+      display: block;
+    }
+
+    .tutorial-icon {
+      font-size: 64px;
+      text-align: center;
+      margin-bottom: 20px;
+      animation: floatIcon 2s ease-in-out infinite;
+    }
+
+    @keyframes floatIcon {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .tutorial-title {
+      font-size: 22px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tutorial-description {
+      font-size: 15px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.85);
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .tutorial-progress {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transition: all 0.3s;
+    }
+
+    .progress-dot.active {
+      width: 24px;
+      border-radius: 4px;
+      background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+    }
+
+    .tutorial-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .tutorial-btn {
+      flex: 1;
+      padding: 14px 24px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .tutorial-btn-skip {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .tutorial-btn-skip:active {
+      transform: scale(0.95);
+    }
+
+    .tutorial-btn-next {
+      background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+      color: white;
+      box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+    }
+
+    .tutorial-btn-next:active {
+      transform: scale(0.95);
+    }
+
     /* Small screen adjustments */
     @media screen and (max-height: 700px) {
       .main-container {
@@ -387,6 +531,14 @@
       .fact-item {
         font-size: clamp(11px, 2vh, 13px);
       }
+
+      .tutorial-card {
+        padding: 24px 20px;
+      }
+
+      .tutorial-icon {
+        font-size: 48px;
+      }
     }
 
     @media screen and (max-height: 600px) {
@@ -401,14 +553,12 @@
 <body>
 
   <div class="main-container">
-    <!-- 1. Header Card -->
     <header class="dish-header">
       <div class="dish-glass-container">
         <h1 class="dish-title">Special Burger Meal</h1>
       </div>
     </header>
 
-    <!-- 2. Video and Facts Grouping -->
     <div class="video-facts-section">
       <section class="video-section">
         <div class="video-container">
@@ -431,9 +581,7 @@
       </section>
     </div>
 
-    <!-- 3. Bottom Action Area (Loading or Button) -->
     <div class="bottom-action-section">
-      <!-- Loading Progress -->
       <div class="loading-section" id="loading-section">
         <div class="progress-container">
           <div class="progress-label" id="progress-label">Preparing AR experience...</div>
@@ -444,7 +592,6 @@
         </div>
       </div>
 
-      <!-- AR Button -->
       <div class="ar-button-container" id="ar-container" style="display: none;">
         <button id="ar-trigger" class="ar-glass-btn">
           <span>View in AR</span>
@@ -453,12 +600,53 @@
     </div>
   </div>
 
-  <!-- AR Engine (Pre-loaded but hidden) - FIXED VERSION -->
-  <model-viewer src="untitled.glb" ar ar-modes="scene-viewer quick-look webxr" ar-placement="floor" ar-scale="fixed"
-    loading="eager" reveal="auto" exposure="1.0" shadow-intensity="0.3" shadow-softness="0.5"
-    environment-image="neutral" tone-mapping="commerce" interaction-prompt="auto" interaction-prompt-threshold="500"
-    touch-action="pan-y" disable-environment-image
-    style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; pointer-events: none;">
+  <!-- AR Tutorial Overlay -->
+  <div class="ar-tutorial-overlay" id="ar-tutorial">
+    <div class="tutorial-card">
+      <!-- Step 1: Place & Move -->
+      <div class="tutorial-step active" id="step-1">
+        <div class="tutorial-icon">📱</div>
+        <h2 class="tutorial-title">Find a Surface</h2>
+        <p class="tutorial-description">
+          Move your phone slowly to scan the area. Point it at a flat surface like a table or floor where you want to
+          place the dish.
+        </p>
+        <div class="tutorial-progress">
+          <div class="progress-dot active"></div>
+          <div class="progress-dot"></div>
+        </div>
+        <div class="tutorial-buttons">
+          <button class="tutorial-btn tutorial-btn-skip" id="skip-tutorial">Skip</button>
+          <button class="tutorial-btn tutorial-btn-next" id="next-step-1">Next</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Zoom & Rotate -->
+      <div class="tutorial-step" id="step-2">
+        <div class="tutorial-icon">🤏</div>
+        <h2 class="tutorial-title">Interact with the Dish</h2>
+        <p class="tutorial-description">
+          <strong>Pinch</strong> with two fingers to zoom in/out<br>
+          <strong>Drag</strong> with one finger to rotate<br>
+          Tap to place it on the surface
+        </p>
+        <div class="tutorial-progress">
+          <div class="progress-dot"></div>
+          <div class="progress-dot active"></div>
+        </div>
+        <div class="tutorial-buttons">
+          <button class="tutorial-btn tutorial-btn-skip" id="back-step">Back</button>
+          <button class="tutorial-btn tutorial-btn-next" id="start-ar">Got it!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AR Engine -->
+  <model-viewer src="dish_scaled.glb" ar ar-modes="webxr scene-viewer quick-look" ar-placement="floor" ar-scale="auto"
+    loading="eager" reveal="auto" exposure="1.0" shadow-intensity="0.5" shadow-softness="0.5"
+    environment-image="neutral" tone-mapping="commerce" camera-controls touch-action="pan-y" disable-environment-image
+    style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none;">
   </model-viewer>
 
   <!-- Desktop Message -->
@@ -481,7 +669,6 @@
     let currentFactIndex = 0;
     const factDisplay = document.getElementById('fact-display');
 
-    // Rotate facts
     function showFact() {
       const fact = facts[currentFactIndex];
       factDisplay.innerHTML = `
@@ -489,7 +676,7 @@
         <span class="fact-text">${fact}</span>
       `;
       factDisplay.style.animation = 'none';
-      factDisplay.offsetHeight; // Trigger reflow
+      factDisplay.offsetHeight;
       factDisplay.style.animation = 'factFade 3s ease-in-out';
     }
 
@@ -498,7 +685,6 @@
       showFact();
     }
 
-    // Start fact rotation
     showFact();
     setInterval(rotateFacts, 3000);
 
@@ -514,7 +700,6 @@
 
     let modelLoaded = false;
 
-    // Loading messages
     const loadingMessages = [
       'Preparing AR experience...',
       'Loading 3D model...',
@@ -522,19 +707,16 @@
       'Almost ready...'
     ];
 
-    // Function to show AR button
     function showARButton() {
       if (modelLoaded) return;
       modelLoaded = true;
 
       console.log('✅ Model loaded successfully!');
 
-      // Complete the progress
       progressBar.style.width = '100%';
       progressText.textContent = '100%';
       progressLabel.textContent = 'Ready!';
 
-      // Transition to AR button
       setTimeout(() => {
         loadingSection.style.opacity = '0';
         loadingSection.style.transition = 'opacity 0.3s ease';
@@ -548,13 +730,11 @@
       }, 400);
     }
 
-    // Track loading progress
     modelViewer.addEventListener('progress', (event) => {
       const progress = Math.round(event.detail.totalProgress * 100);
       progressBar.style.width = `${progress}%`;
       progressText.textContent = `${progress}%`;
 
-      // Update loading message based on progress
       if (progress < 30) {
         progressLabel.textContent = loadingMessages[0];
       } else if (progress < 60) {
@@ -568,13 +748,11 @@
       console.log('📊 Loading:', progress + '%');
     });
 
-    // Model loaded - show button
     modelViewer.addEventListener('load', () => {
       console.log('🎉 Load event fired');
       showARButton();
     });
 
-    // Fallback: model-visibility event
     modelViewer.addEventListener('model-visibility', (event) => {
       console.log('👁️ Model visibility:', event.detail.visible);
       if (event.detail.visible) {
@@ -582,7 +760,6 @@
       }
     });
 
-    // Additional fallback: Check after timeout
     setTimeout(() => {
       if (!modelLoaded && modelViewer.loaded) {
         console.log('⚠️ Fallback: Model loaded but event missed');
@@ -593,15 +770,64 @@
       }
     }, 8000);
 
+    // AR Tutorial System
+    const arTutorial = document.getElementById('ar-tutorial');
+    const step1 = document.getElementById('step-1');
+    const step2 = document.getElementById('step-2');
+    const skipBtn = document.getElementById('skip-tutorial');
+    const nextBtn1 = document.getElementById('next-step-1');
+    const backBtn = document.getElementById('back-step');
+    const startArBtn = document.getElementById('start-ar');
+
+    let tutorialShown = localStorage.getItem('arTutorialShown') === 'true';
+
+    // Next button (Step 1 → Step 2)
+    nextBtn1.addEventListener('click', () => {
+      step1.classList.remove('active');
+      step2.classList.add('active');
+    });
+
+    // Back button (Step 2 → Step 1)
+    backBtn.addEventListener('click', () => {
+      step2.classList.remove('active');
+      step1.classList.add('active');
+    });
+
+    // Skip button
+    skipBtn.addEventListener('click', () => {
+      arTutorial.classList.remove('active');
+      localStorage.setItem('arTutorialShown', 'true');
+      modelViewer.activateAR();
+    });
+
+    // Got it button (Start AR)
+    startArBtn.addEventListener('click', () => {
+      arTutorial.classList.remove('active');
+      localStorage.setItem('arTutorialShown', 'true');
+      tutorialShown = true;
+    });
+
     // Handle AR Trigger
     arButton.addEventListener('click', () => {
       if (modelViewer.canActivateAR) {
         console.log('🚀 Launching AR...');
-        modelViewer.activateAR();
+
+        // Show tutorial only for WebXR and only first time
+        const isWebXR = modelViewer.ar && modelViewer.canActivateAR;
+        if (isWebXR && !tutorialShown) {
+          arTutorial.classList.add('active');
+        } else {
+          modelViewer.activateAR();
+        }
       } else {
         console.log('⚠️ AR not available on this device');
         desktopMessage.style.display = 'block';
       }
+    });
+
+    // Detect WebXR session start
+    modelViewer.addEventListener('ar-status', (event) => {
+      console.log('AR Status:', event.detail.status);
     });
 
     // Detect environment on load
@@ -618,19 +844,10 @@
       }
     });
 
-    // Error handling
     modelViewer.addEventListener('error', (event) => {
       console.error('❌ Model error:', event.detail);
       progressLabel.textContent = 'Error loading model';
       progressLabel.style.color = '#ff4444';
-    });
-
-    // AR session status
-    modelViewer.addEventListener('ar-status', (event) => {
-      console.log('AR status:', event.detail.status);
-      if (event.detail.status === 'failed') {
-        alert("AR is not supported on this browser/device.");
-      }
     });
   </script>
 
