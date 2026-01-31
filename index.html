@@ -32,13 +32,24 @@
       background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
       font-family: 'Poppins', sans-serif;
       color: white;
-      min-height: 100vh;
-      min-height: -webkit-fill-available;
+      height: 100vh;
+      width: 100vw;
       display: flex;
       flex-direction: column;
-      position: relative;
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: env(safe-area-inset-bottom);
+      align-items: center;
+      justify-content: space-evenly;
+      padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
+      overflow: hidden;
+    }
+
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      width: 100%;
+      max-width: 428px;
     }
 
     .dish-header {
@@ -65,6 +76,7 @@
       font-size: 18px;
       font-weight: 800;
       letter-spacing: -0.5px;
+      font-family: 'Comic Sans MS', 'Comic Sans', cursive;
       background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
       -webkit-background-clip: text;
       background-clip: text;
@@ -80,12 +92,20 @@
       letter-spacing: 2px;
     }
 
-    /* Video Container */
+    /* Container for Video and Facts Group */
+    .video-facts-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
     .video-section {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px 20px;
+      padding: 0;
       flex-shrink: 0;
     }
 
@@ -141,8 +161,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px 20px 100px;
+      padding: 0;
+      width: 100%;
       flex-shrink: 0;
+      height: 60px;
+      /* Fixed height for consistent spacing */
     }
 
     .fact-container {
@@ -197,15 +220,19 @@
       }
     }
 
-    /* Loading Progress - Fixed at bottom */
+    /* Loading & AR Button Container Area */
+    .bottom-action-section {
+      width: 100%;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
     .loading-section {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 20px 24px;
-      padding-bottom: max(20px, env(safe-area-inset-bottom));
-      z-index: 100;
+      width: 100%;
+      padding: 0 24px;
       transition: opacity 0.3s ease;
     }
 
@@ -249,12 +276,7 @@
 
     /* AR Button */
     .ar-button-container {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 20px;
-      padding-bottom: max(20px, env(safe-area-inset-bottom));
+      width: 100%;
       display: flex;
       justify-content: center;
       z-index: 100;
@@ -409,51 +431,57 @@
 
 <body>
 
-  <!-- Glassmorphic Dish Header -->
-  <header class="dish-header">
-    <div class="dish-glass-container">
-      <h1 class="dish-title">Special Burger Meal</h1>
-    </div>
-  </header>
+  <div class="main-container">
+    <!-- 1. Header Card -->
+    <header class="dish-header">
+      <div class="dish-glass-container">
+        <h1 class="dish-title">Special Burger Meal</h1>
+      </div>
+    </header>
 
-  <!-- Video Container -->
-  <section class="video-section">
-    <div class="video-container">
-      <div class="video-inner">
-        <video autoplay loop muted playsinline>
-          <source src="video.webm" type="video/webm">
-        </video>
-        <div class="video-overlay"></div>
+    <!-- 2. Video and Facts Grouping -->
+    <div class="video-facts-section">
+      <section class="video-section">
+        <div class="video-container">
+          <div class="video-inner">
+            <video autoplay loop muted playsinline>
+              <source src="video.webm" type="video/webm">
+            </video>
+            <div class="video-overlay"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="facts-section">
+        <div class="fact-container">
+          <div class="fact-item" id="fact-display">
+            <span class="fact-icon"></span>
+            <span class="fact-text">Loading interesting facts...</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 3. Bottom Action Area (Loading or Button) -->
+    <div class="bottom-action-section">
+      <!-- Loading Progress -->
+      <div class="loading-section" id="loading-section">
+        <div class="progress-container">
+          <div class="progress-label" id="progress-label">Preparing AR experience...</div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+          </div>
+          <div class="progress-text" id="progress-text">0%</div>
+        </div>
+      </div>
+
+      <!-- AR Button -->
+      <div class="ar-button-container" id="ar-container" style="display: none;">
+        <button id="ar-trigger" class="ar-glass-btn">
+          <span>View in AR</span>
+        </button>
       </div>
     </div>
-  </section>
-
-  <!-- Rotating Facts Section -->
-  <section class="facts-section">
-    <div class="fact-container">
-      <div class="fact-item" id="fact-display">
-        <span class="fact-emoji">🍔</span>
-        <span class="fact-text">Loading interesting facts...</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Loading Progress -->
-  <div class="loading-section" id="loading-section">
-    <div class="progress-container">
-      <div class="progress-label" id="progress-label">Preparing AR experience...</div>
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" id="progress-bar"></div>
-      </div>
-      <div class="progress-text" id="progress-text">0%</div>
-    </div>
-  </div>
-
-  <!-- AR Button (Hidden until loaded) -->
-  <div class="ar-button-container" id="ar-container" style="display: none;">
-    <button id="ar-trigger" class="ar-glass-btn">
-      <span>View in AR</span>
-    </button>
   </div>
 
   <!-- AR Engine (Pre-loaded but hidden) -->
