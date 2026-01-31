@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Special Meal - AR Menu</title>
+
+  <!-- Google model-viewer -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      overflow: hidden;
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: max(40px, env(safe-area-inset-top)) 20px 20px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+      z-index: 10;
+    }
+
+    .dish-title h1 {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    .dish-category {
+      font-size: 14px;
+      color: #ff6a00;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+
+    /* Loading Screen */
+    .loading-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      text-align: center;
+    }
+
+    .progress-ring {
+      position: relative;
+      width: 120px;
+      height: 120px;
+    }
+
+    .progress-ring svg {
+      transform: rotate(-90deg);
+    }
+
+    .progress-ring-bg {
+      stroke: rgba(255, 255, 255, 0.1);
+    }
+
+    .progress-ring-fill {
+      stroke: url(#gradient);
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.3s ease;
+    }
+
+    .progress-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 28px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .loading-label {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 500;
+    }
+
+    .intro-image {
+      width: 240px;
+      height: 240px;
+      object-fit: contain;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      animation: float 3s ease-in-out infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    /* Central AR Button */
+    .ar-glass-btn {
+      padding: 28px 56px;
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      text-align: center;
+      border-radius: 100px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%);
+      box-shadow: 0 25px 60px rgba(255, 106, 0, 0.5);
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: none;
+      align-items: center;
+      gap: 15px;
+      z-index: 100;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .ar-glass-btn.visible {
+      display: flex;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .ar-glass-btn:hover {
+      transform: scale(1.05) translateY(-8px);
+      box-shadow: 0 35px 80px rgba(255, 106, 0, 0.7);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .ar-glass-btn:active {
+      transform: scale(0.95);
+    }
+
+    .ar-icon {
+      font-size: 32px;
+    }
+
+    /* Hidden model-viewer strictly for AR logic */
+    model-viewer {
+      width: 1px;
+      height: 1px;
+      position: absolute;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Desktop-only message */
+    .desktop-message {
+      position: fixed;
+      bottom: 50px;
+      padding: 24px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      max-width: 320px;
+      z-index: 10;
+      display: none;
+      animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="dish-title">
+      <h1>Special Meal</h1>
+      <div class="dish-category">🔥 Chef's Special</div>
+    </div>
+  </div>
+
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loading-screen">
+    <img src="image.webp" alt="Dish Preview" class="intro-image">
+    <div class="progress-ring">
+      <svg width="120" height="120">
+        <defs>
+          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ff6a00" />
+            <stop offset="100%" stop-color="#ee0979" />
+          </linearGradient>
+        </defs>
+        <circle class="progress-ring-bg" cx="60" cy="60" r="52" fill="none" stroke-width="8" />
+        <circle class="progress-ring-fill" id="progress-circle" cx="60" cy="60" r="52" fill="none" stroke-width="8"
+          stroke-dasharray="327" stroke-dashoffset="327" />
+      </svg>
+      <div class="progress-text" id="progress-text">0%</div>
+    </div>
+    <div class="loading-label">Preparing your experience...</div>
+  </div>
+
+  <!-- Primary Action Button (Hidden until loaded) -->
+  <button id="ar-trigger" class="ar-glass-btn">
+    <span class="ar-icon">📱</span>
+    <span>View in AR</span>
+  </button>
+
+  <!-- AR Engine (Pre-loaded but hidden) -->
+  <model-viewer src="dish-optimized.glb" ar ar-modes="scene-viewer quick-look webxr" ar-placement="floor" ar-scale="auto"
+    loading="eager" reveal="auto" exposure="1" shadow-intensity="0.8" touch-action="none" interaction-prompt="none"
+    style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none;">
+  </model-viewer>
+
+  <div class="desktop-message" id="desktop-message">
+    <div style="font-weight: 800; color: #ff6a00; margin-bottom: 12px; font-size: 18px;">📱 Phone Recommended</div>
+    <div style="font-size: 15px; opacity: 0.9; line-height: 1.5;">Please open this link on your smartphone to view the
+      dish in 3D on your table.</div>
+  </div>
+
+  <script>
+    const modelViewer = document.querySelector('model-viewer');
+    const arButton = document.getElementById('ar-trigger');
+    const desktopMessage = document.getElementById('desktop-message');
+    const loadingScreen = document.getElementById('loading-screen');
+    const progressCircle = document.getElementById('progress-circle');
+    const progressText = document.getElementById('progress-text');
+
+    const circumference = 2 * Math.PI * 52; // r = 52
+
+    // Track loading progress
+    modelViewer.addEventListener('progress', (event) => {
+      const progress = Math.round(event.detail.totalProgress * 100);
+      progressText.textContent = `${progress}%`;
+
+      // Update circle fill
+      const offset = circumference - (progress / 100) * circumference;
+      progressCircle.style.strokeDashoffset = offset;
+    });
+
+    // Model loaded - show button
+    modelViewer.addEventListener('load', () => {
+      // Complete the circle
+      progressCircle.style.strokeDashoffset = 0;
+      progressText.textContent = '100%';
+
+      // Transition to button
+      setTimeout(() => {
+        loadingScreen.style.display = 'none';
+        arButton.classList.add('visible');
+      }, 500);
+    });
+
+    // Handle AR Trigger
+    arButton.addEventListener('click', () => {
+      if (modelViewer.canActivateAR) {
+        modelViewer.activateAR();
+      } else {
+        desktopMessage.style.display = 'block';
+      }
+    });
+
+    // Detect environment on load
+    window.addEventListener('load', () => {
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (!isMobile) {
+        // Still show loading, but also show desktop message after load
+        modelViewer.addEventListener('load', () => {
+          setTimeout(() => {
+            desktopMessage.style.display = 'block';
+          }, 600);
+        }, { once: true });
+      }
+    });
+
+    // AR session status
+    modelViewer.addEventListener('ar-status', (event) => {
+      if (event.detail.status === 'failed') {
+        alert("AR is not supported on this browser/device.");
+      }
+    });
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,10 @@
+# Exclude non-optimized and incompatible model files
+dish-webp.glb
+file-webp.glb
+
+# Node modules (if any)
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
