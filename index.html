@@ -32,14 +32,14 @@
       background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
       font-family: 'Poppins', sans-serif;
       color: white;
-      min-height: 100vh;
+      height: 100vh;
       width: 100vw;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     .main-container {
@@ -47,7 +47,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: clamp(40px, 8vh, 100px);
+      gap: clamp(30px, 6vh, 80px);
       width: 100%;
       max-width: 428px;
     }
@@ -73,7 +73,7 @@
     }
 
     .dish-title {
-      font-size: 18px;
+      font-size: clamp(16px, 4vh, 22px);
       font-weight: 800;
       letter-spacing: -0.5px;
       font-family: 'Comic Sans MS', 'Comic Sans', cursive;
@@ -174,7 +174,7 @@
     }
 
     .fact-item {
-      font-size: 12px;
+      font-size: clamp(11px, 2.5vh, 14px);
       line-height: 1.6;
       color: rgba(255, 255, 255, 0.85);
       opacity: 0;
@@ -283,8 +283,8 @@
     }
 
     .ar-glass-btn {
-      padding: 14px 36px;
-      font-size: 14px;
+      padding: clamp(12px, 3vh, 18px) clamp(30px, 8vw, 45px);
+      font-size: clamp(13px, 3vh, 16px);
       font-weight: 800;
       color: #fff;
       text-align: center;
