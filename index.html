@@ -255,8 +255,8 @@
 
   <!-- AR Engine (Pre-loaded but hidden) -->
   <model-viewer src="dish.glb" ar ar-modes="scene-viewer quick-look webxr" ar-placement="floor" ar-scale="auto"
-    loading="eager" reveal="auto" exposure="1" shadow-intensity="1" touch-action="none" interaction-prompt="none"
-    environment-image="neutral" skybox-image="neutral"
+    loading="eager" reveal="auto" exposure="1.0" shadow-intensity="0" shadow-softness="0" environment-image="neutral"
+    tone-mapping="commerce" touch-action="none" interaction-prompt="none"
     style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none;">
   </model-viewer>
 
@@ -282,7 +282,7 @@
       if (modelLoaded) return; // Prevent multiple calls
       modelLoaded = true;
 
-      console.log('Model loaded successfully!');
+      console.log('✅ Model loaded successfully!');
 
       // Complete the circle
       progressCircle.style.strokeDashoffset = 0;
@@ -292,7 +292,7 @@
       setTimeout(() => {
         loadingScreen.style.display = 'none';
         arButton.classList.add('visible');
-        console.log('AR button should now be visible');
+        console.log('✅ AR button visible');
       }, 500);
     }
 
@@ -300,7 +300,7 @@
     modelViewer.addEventListener('progress', (event) => {
       const progress = Math.round(event.detail.totalProgress * 100);
       progressText.textContent = `${progress}%`;
-      console.log('Loading progress:', progress + '%');
+      console.log('📊 Loading:', progress + '%');
 
       // Update circle fill
       const offset = circumference - (progress / 100) * circumference;
@@ -309,13 +309,13 @@
 
     // Model loaded - show button (primary event)
     modelViewer.addEventListener('load', () => {
-      console.log('Load event fired');
+      console.log('🎉 Load event fired');
       showARButton();
     });
 
     // Fallback: model-visibility event
     modelViewer.addEventListener('model-visibility', (event) => {
-      console.log('Model visibility event:', event.detail.visible);
+      console.log('👁️ Model visibility:', event.detail.visible);
       if (event.detail.visible) {
         showARButton();
       }
@@ -324,20 +324,21 @@
     // Additional fallback: Check after a timeout
     setTimeout(() => {
       if (!modelLoaded && modelViewer.loaded) {
-        console.log('Fallback: Model was loaded but event did not fire');
+        console.log('⚠️ Fallback: Model loaded but event missed');
         showARButton();
       } else if (!modelLoaded) {
-        // Debug: Show what's happening
-        console.error('Model did not load within 5 seconds');
-        loadingScreen.innerHTML += '<div style="color: red; margin-top: 20px; font-size: 14px;">⚠️ Model loading issue detected. Check console for details.</div>';
+        console.error('❌ Model failed to load within 5 seconds');
+        loadingScreen.innerHTML += '<div style="color: red; margin-top: 20px; font-size: 14px;">⚠️ Model loading issue detected. Check console.</div>';
       }
     }, 5000);
 
     // Handle AR Trigger
     arButton.addEventListener('click', () => {
       if (modelViewer.canActivateAR) {
+        console.log('🚀 Launching AR...');
         modelViewer.activateAR();
       } else {
+        console.log('⚠️ AR not available on this device');
         desktopMessage.style.display = 'block';
       }
     });
@@ -345,8 +346,9 @@
     // Detect environment on load
     window.addEventListener('load', () => {
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      console.log('📱 Mobile device:', isMobile);
+
       if (!isMobile) {
-        // Still show loading, but also show desktop message after load
         modelViewer.addEventListener('load', () => {
           setTimeout(() => {
             desktopMessage.style.display = 'block';
@@ -357,14 +359,13 @@
 
     // Error handling
     modelViewer.addEventListener('error', (event) => {
-      console.error('Model loading error:', event);
-      console.error('Error details:', event.detail);
-      console.error('Error type:', event.type);
-      alert('Failed to load 3D model. Error: ' + (event.detail?.message || 'Unknown error'));
+      console.error('❌ Model error:', event.detail);
+      alert('Failed to load 3D model. Check console for details.');
     });
 
     // AR session status
     modelViewer.addEventListener('ar-status', (event) => {
+      console.log('AR status:', event.detail.status);
       if (event.detail.status === 'failed') {
         alert("AR is not supported on this browser/device.");
       }
