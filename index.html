@@ -254,7 +254,7 @@
   </button>
 
   <!-- AR Engine (Pre-loaded but hidden) -->
-  <model-viewer src="dish-optimized.glb" ar ar-modes="scene-viewer quick-look webxr" ar-placement="floor" ar-scale="auto"
+  <model-viewer src="dish.glb" ar ar-modes="scene-viewer quick-look webxr" ar-placement="floor" ar-scale="auto"
     loading="eager" reveal="auto" exposure="1" shadow-intensity="0.8" touch-action="none" interaction-prompt="none"
     style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none;">
   </model-viewer>
@@ -274,19 +274,15 @@
     const progressText = document.getElementById('progress-text');
 
     const circumference = 2 * Math.PI * 52; // r = 52
+    let modelLoaded = false;
 
-    // Track loading progress
-    modelViewer.addEventListener('progress', (event) => {
-      const progress = Math.round(event.detail.totalProgress * 100);
-      progressText.textContent = `${progress}%`;
+    // Function to show AR button
+    function showARButton() {
+      if (modelLoaded) return; // Prevent multiple calls
+      modelLoaded = true;
 
-      // Update circle fill
-      const offset = circumference - (progress / 100) * circumference;
-      progressCircle.style.strokeDashoffset = offset;
-    });
+      console.log('Model loaded successfully!');
 
-    // Model loaded - show button
-    modelViewer.addEventListener('load', () => {
       // Complete the circle
       progressCircle.style.strokeDashoffset = 0;
       progressText.textContent = '100%';
@@ -295,8 +291,46 @@
       setTimeout(() => {
         loadingScreen.style.display = 'none';
         arButton.classList.add('visible');
+        console.log('AR button should now be visible');
       }, 500);
+    }
+
+    // Track loading progress
+    modelViewer.addEventListener('progress', (event) => {
+      const progress = Math.round(event.detail.totalProgress * 100);
+      progressText.textContent = `${progress}%`;
+      console.log('Loading progress:', progress + '%');
+
+      // Update circle fill
+      const offset = circumference - (progress / 100) * circumference;
+      progressCircle.style.strokeDashoffset = offset;
     });
+
+    // Model loaded - show button (primary event)
+    modelViewer.addEventListener('load', () => {
+      console.log('Load event fired');
+      showARButton();
+    });
+
+    // Fallback: model-visibility event
+    modelViewer.addEventListener('model-visibility', (event) => {
+      console.log('Model visibility event:', event.detail.visible);
+      if (event.detail.visible) {
+        showARButton();
+      }
+    });
+
+    // Additional fallback: Check after a timeout
+    setTimeout(() => {
+      if (!modelLoaded && modelViewer.loaded) {
+        console.log('Fallback: Model was loaded but event did not fire');
+        showARButton();
+      } else if (!modelLoaded) {
+        // Debug: Show what's happening
+        console.error('Model did not load within 5 seconds');
+        loadingScreen.innerHTML += '<div style="color: red; margin-top: 20px; font-size: 14px;">⚠️ Model loading issue detected. Check console for details.</div>';
+      }
+    }, 5000);
 
     // Handle AR Trigger
     arButton.addEventListener('click', () => {
@@ -318,6 +352,14 @@
           }, 600);
         }, { once: true });
       }
+    });
+
+    // Error handling
+    modelViewer.addEventListener('error', (event) => {
+      console.error('Model loading error:', event);
+      console.error('Error details:', event.detail);
+      console.error('Error type:', event.type);
+      alert('Failed to load 3D model. Error: ' + (event.detail?.message || 'Unknown error'));
     });
 
     // AR session status
