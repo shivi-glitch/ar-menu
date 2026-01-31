@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Special Meal - AR Menu</title>
+  <title>Burger AR Menu</title>
 
   <!-- Google model-viewer -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
@@ -16,170 +16,296 @@
       box-sizing: border-box;
     }
 
+    html,
     body {
-      margin: 0;
+      height: 100%;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
       background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      overflow: hidden;
+      font-family: 'Comic Sans MS', 'Comic Sans', cursive;
       color: white;
-      height: 100vh;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
       position: relative;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
-    .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      padding: max(40px, env(safe-area-inset-top)) 20px 20px;
-      text-align: center;
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+    .dish-header {
+      width: 100%;
+      padding: 16px 16px;
+      display: flex;
+      justify-content: center;
       z-index: 10;
+      flex-shrink: 0;
     }
 
-    .dish-title h1 {
-      font-size: 36px;
-      font-weight: 900;
-      letter-spacing: -1.5px;
-      background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
+    .dish-glass-container {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 10px 20px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .dish-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
+      margin-bottom: 0;
     }
 
-    .dish-category {
-      font-size: 14px;
-      color: #ff6a00;
-      font-weight: 700;
+    .dish-subtitle {
+      font-size: 12px;
+      color: #a78bfa;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
     }
 
-    /* Loading Screen */
-    .loading-screen {
+    /* Video Container */
+    .video-section {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 24px;
-      text-align: center;
+      justify-content: center;
+      padding: 16px 20px;
+      flex-shrink: 0;
     }
 
-    .progress-ring {
+    .video-container {
+      width: min(80vw, 300px);
+      height: min(80vw, 300px);
       position: relative;
-      width: 120px;
-      height: 120px;
-    }
-
-    .progress-ring svg {
-      transform: rotate(-90deg);
-    }
-
-    .progress-ring-bg {
-      stroke: rgba(255, 255, 255, 0.1);
-    }
-
-    .progress-ring-fill {
-      stroke: url(#gradient);
-      stroke-linecap: round;
-      transition: stroke-dashoffset 0.3s ease;
-    }
-
-    .progress-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 28px;
-      font-weight: 800;
-      color: #fff;
-    }
-
-    .loading-label {
-      font-size: 16px;
-      color: rgba(255, 255, 255, 0.7);
-      font-weight: 500;
-    }
-
-    .intro-image {
-      width: 240px;
-      height: 240px;
-      object-fit: contain;
+      overflow: hidden;
+      flex-shrink: 0;
       border-radius: 24px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-      animation: float 3s ease-in-out infinite;
-      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 0 60px rgba(124, 58, 237, 0.1);
+      padding: 8px;
     }
 
-    @keyframes float {
+    .video-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+    }
 
-      0%,
-      100% {
+    .video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+
+    .video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg,
+          rgba(10, 10, 10, 0.2) 0%,
+          transparent 30%,
+          transparent 70%,
+          rgba(10, 10, 10, 0.3) 100%);
+      pointer-events: none;
+      border-radius: 16px;
+    }
+
+    /* Facts Section */
+    .facts-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 20px 100px;
+      flex-shrink: 0;
+    }
+
+    .fact-container {
+      text-align: center;
+      max-width: 340px;
+    }
+
+    .fact-item {
+      font-size: 12px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.85);
+      opacity: 0;
+      animation: factFade 3s ease-in-out infinite;
+      display: flex;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .fact-icon {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+      border-radius: 50%;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+
+    .fact-text {
+      flex: 1;
+    }
+
+    @keyframes factFade {
+      0% {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      15% {
+        opacity: 1;
         transform: translateY(0);
       }
 
-      50% {
+      85% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      100% {
+        opacity: 0;
         transform: translateY(-10px);
       }
     }
 
-    /* Central AR Button */
+    /* Loading Progress */
+    .loading-section {
+      width: 100%;
+      padding: 20px 24px 32px;
+      flex-shrink: 0;
+    }
+
+    .progress-container {
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    .progress-label {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #7c3aed 0%, #06b6d4 100%);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .progress-text {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      text-align: center;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+
+    /* AR Button */
+    .ar-button-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px;
+      padding-bottom: max(20px, env(safe-area-inset-bottom));
+      display: flex;
+      justify-content: center;
+      z-index: 100;
+    }
+
     .ar-glass-btn {
-      padding: 28px 56px;
-      font-size: 22px;
-      font-weight: 900;
+      padding: 14px 36px;
+      font-size: 14px;
+      font-weight: 800;
       color: #fff;
       text-align: center;
       border-radius: 100px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%);
-      box-shadow: 0 25px 60px rgba(255, 106, 0, 0.5);
+      border: none;
+      background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+      box-shadow:
+        0 10px 40px rgba(124, 58, 237, 0.4),
+        0 0 60px rgba(6, 182, 212, 0.2);
       cursor: pointer;
       transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       display: none;
       align-items: center;
-      gap: 15px;
-      z-index: 100;
+      gap: 12px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      animation: fadeInUp 0.6s ease-out;
+      min-width: 44px;
+      min-height: 44px;
     }
 
     .ar-glass-btn.visible {
       display: flex;
+      animation: slideUpIn 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
     }
 
-    @keyframes fadeInUp {
-      from {
+    @keyframes slideUpIn {
+      0% {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(40px);
       }
 
-      to {
+      100% {
         opacity: 1;
         transform: translateY(0);
       }
     }
 
     .ar-glass-btn:hover {
-      transform: scale(1.05) translateY(-8px);
-      box-shadow: 0 35px 80px rgba(255, 106, 0, 0.7);
-      border-color: rgba(255, 255, 255, 0.4);
+      transform: scale(1.03) translateY(-4px);
+      box-shadow:
+        0 20px 60px rgba(124, 58, 237, 0.5),
+        0 0 80px rgba(6, 182, 212, 0.3);
     }
 
     .ar-glass-btn:active {
-      transform: scale(0.95);
+      transform: scale(0.97);
     }
 
     .ar-icon {
-      font-size: 32px;
+      font-size: 24px;
     }
 
-    /* Hidden model-viewer strictly for AR logic */
+    /* Hidden model-viewer */
     model-viewer {
       width: 1px;
       height: 1px;
@@ -188,31 +314,84 @@
       pointer-events: none;
     }
 
-    /* Desktop-only message */
+    /* Desktop Message */
     .desktop-message {
       position: fixed;
-      bottom: 50px;
-      padding: 24px;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 20px 24px;
       text-align: center;
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(20px);
-      border-radius: 24px;
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      max-width: 320px;
+      max-width: 300px;
       z-index: 10;
       display: none;
-      animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      animation: fadeIn 0.6s ease;
     }
 
-    @keyframes slideUp {
+    @keyframes fadeIn {
       from {
-        transform: translateY(100px);
         opacity: 0;
       }
 
       to {
-        transform: translateY(0);
         opacity: 1;
+      }
+    }
+
+    /* Loading Screen Overlay - shown while loading */
+    #loading-overlay {
+      transition: opacity 0.4s ease;
+    }
+
+    #loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Mobile Optimizations */
+    @media screen and (max-width: 428px) {
+      .dish-title {
+        font-size: 26px;
+      }
+
+      .dish-glass-container {
+        padding: 14px 28px;
+      }
+
+      .video-container {
+        height: 38vh;
+      }
+
+      .facts-section {
+        padding: 20px 16px;
+      }
+
+      .fact-item {
+        font-size: 15px;
+      }
+    }
+
+    @media screen and (max-width: 375px) {
+      .dish-title {
+        font-size: 24px;
+      }
+
+      .dish-glass-container {
+        padding: 12px 24px;
+      }
+
+      .video-container {
+        height: 35vh;
+      }
+
+      .ar-glass-btn {
+        padding: 18px 40px;
+        font-size: 16px;
       }
     }
   </style>
@@ -220,94 +399,168 @@
 
 <body>
 
-  <div class="header">
-    <div class="dish-title">
-      <h1>Special Meal</h1>
-      <div class="dish-category">🔥 Chef's Special</div>
+  <!-- Glassmorphic Dish Header -->
+  <header class="dish-header">
+    <div class="dish-glass-container">
+      <h1 class="dish-title">Special Burger Meal</h1>
     </div>
-  </div>
+  </header>
 
-  <!-- Loading Screen -->
-  <div class="loading-screen" id="loading-screen">
-    <img src="image.webp" alt="Dish Preview" class="intro-image">
-    <div class="progress-ring">
-      <svg width="120" height="120">
-        <defs>
-          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#ff6a00" />
-            <stop offset="100%" stop-color="#ee0979" />
-          </linearGradient>
-        </defs>
-        <circle class="progress-ring-bg" cx="60" cy="60" r="52" fill="none" stroke-width="8" />
-        <circle class="progress-ring-fill" id="progress-circle" cx="60" cy="60" r="52" fill="none" stroke-width="8"
-          stroke-dasharray="327" stroke-dashoffset="327" />
-      </svg>
+  <!-- Video Container -->
+  <section class="video-section">
+    <div class="video-container">
+      <div class="video-inner">
+        <video autoplay loop muted playsinline>
+          <source src="video.webm" type="video/webm">
+        </video>
+        <div class="video-overlay"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rotating Facts Section -->
+  <section class="facts-section">
+    <div class="fact-container">
+      <div class="fact-item" id="fact-display">
+        <span class="fact-emoji">🍔</span>
+        <span class="fact-text">Loading interesting facts...</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Loading Progress -->
+  <div class="loading-section" id="loading-section">
+    <div class="progress-container">
+      <div class="progress-label" id="progress-label">Preparing AR experience...</div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-bar"></div>
+      </div>
       <div class="progress-text" id="progress-text">0%</div>
     </div>
-    <div class="loading-label">Preparing your experience...</div>
   </div>
 
-  <!-- Primary Action Button (Hidden until loaded) -->
-  <button id="ar-trigger" class="ar-glass-btn">
-    <span class="ar-icon">📱</span>
-    <span>View in AR</span>
-  </button>
+  <!-- AR Button (Hidden until loaded) -->
+  <div class="ar-button-container" id="ar-container" style="display: none;">
+    <button id="ar-trigger" class="ar-glass-btn">
+      <span>View in AR</span>
+    </button>
+  </div>
 
   <!-- AR Engine (Pre-loaded but hidden) -->
   <model-viewer src="dish_scaled.glb" ar ar-modes="webxr quick-look scene-viewer" ar-placement="floor" ar-scale="fixed"
     loading="eager" reveal="auto" exposure="1.0" shadow-intensity="0" shadow-softness="0" environment-image="neutral"
-    tone-mapping="commerce" touch-action="none" interaction-prompt="none" disable-tap
+    tone-mapping="commerce" touch-action="none" interaction-prompt="none" disable-tap disable-environment-image
     style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none;">
   </model-viewer>
 
+  <!-- Desktop Message -->
   <div class="desktop-message" id="desktop-message">
-    <div style="font-weight: 800; color: #ff6a00; margin-bottom: 12px; font-size: 18px;">📱 Phone Recommended</div>
-    <div style="font-size: 15px; opacity: 0.9; line-height: 1.5;">Please open this link on your smartphone to view the
-      dish in 3D on your table.</div>
+    <div style="font-weight: 800; color: #a78bfa; margin-bottom: 10px; font-size: 16px;">Phone Recommended</div>
+    <div style="font-size: 14px; opacity: 0.85; line-height: 1.5;">Open this link on your smartphone to view the dish in
+      AR on your table.</div>
   </div>
 
   <script>
+    // Facts data
+    const facts = [
+      'The hamburger was invented in 1885 at a fair in Hamburg, New York',
+      'French fries actually originated in Belgium, not France',
+      'Indians ordered 44 million burgers last year — that\'s 3 burgers every second!',
+      'Most Indians prefer burgers during dinner and late-night hours over lunch',
+      'India\'s burger market is growing at 19.4% — fastest in the QSR sector'
+    ];
+
+    let currentFactIndex = 0;
+    const factDisplay = document.getElementById('fact-display');
+
+    // Rotate facts
+    function showFact() {
+      const fact = facts[currentFactIndex];
+      factDisplay.innerHTML = `
+        <span class="fact-icon"></span>
+        <span class="fact-text">${fact}</span>
+      `;
+      factDisplay.style.animation = 'none';
+      factDisplay.offsetHeight; // Trigger reflow
+      factDisplay.style.animation = 'factFade 3s ease-in-out';
+    }
+
+    function rotateFacts() {
+      currentFactIndex = (currentFactIndex + 1) % facts.length;
+      showFact();
+    }
+
+    // Start fact rotation
+    showFact();
+    setInterval(rotateFacts, 3000);
+
+    // Model viewer and loading
     const modelViewer = document.querySelector('model-viewer');
     const arButton = document.getElementById('ar-trigger');
+    const arContainer = document.getElementById('ar-container');
     const desktopMessage = document.getElementById('desktop-message');
-    const loadingScreen = document.getElementById('loading-screen');
-    const progressCircle = document.getElementById('progress-circle');
+    const loadingSection = document.getElementById('loading-section');
+    const progressBar = document.getElementById('progress-bar');
     const progressText = document.getElementById('progress-text');
+    const progressLabel = document.getElementById('progress-label');
 
-    const circumference = 2 * Math.PI * 52; // r = 52
     let modelLoaded = false;
+
+    // Loading messages
+    const loadingMessages = [
+      'Preparing AR experience...',
+      'Loading 3D model...',
+      'Optimizing textures...',
+      'Almost ready...'
+    ];
 
     // Function to show AR button
     function showARButton() {
-      if (modelLoaded) return; // Prevent multiple calls
+      if (modelLoaded) return;
       modelLoaded = true;
 
       console.log('✅ Model loaded successfully!');
 
-      // Complete the circle
-      progressCircle.style.strokeDashoffset = 0;
+      // Complete the progress
+      progressBar.style.width = '100%';
       progressText.textContent = '100%';
+      progressLabel.textContent = 'Ready!';
 
-      // Transition to button
+      // Transition to AR button
       setTimeout(() => {
-        loadingScreen.style.display = 'none';
-        arButton.classList.add('visible');
-        console.log('✅ AR button visible');
-      }, 500);
+        loadingSection.style.opacity = '0';
+        loadingSection.style.transition = 'opacity 0.3s ease';
+
+        setTimeout(() => {
+          loadingSection.style.display = 'none';
+          arContainer.style.display = 'flex';
+          arButton.classList.add('visible');
+          console.log('✅ AR button visible');
+        }, 300);
+      }, 400);
     }
 
     // Track loading progress
     modelViewer.addEventListener('progress', (event) => {
       const progress = Math.round(event.detail.totalProgress * 100);
+      progressBar.style.width = `${progress}%`;
       progressText.textContent = `${progress}%`;
-      console.log('📊 Loading:', progress + '%');
 
-      // Update circle fill
-      const offset = circumference - (progress / 100) * circumference;
-      progressCircle.style.strokeDashoffset = offset;
+      // Update loading message based on progress
+      if (progress < 30) {
+        progressLabel.textContent = loadingMessages[0];
+      } else if (progress < 60) {
+        progressLabel.textContent = loadingMessages[1];
+      } else if (progress < 90) {
+        progressLabel.textContent = loadingMessages[2];
+      } else {
+        progressLabel.textContent = loadingMessages[3];
+      }
+
+      console.log('📊 Loading:', progress + '%');
     });
 
-    // Model loaded - show button (primary event)
+    // Model loaded - show button
     modelViewer.addEventListener('load', () => {
       console.log('🎉 Load event fired');
       showARButton();
@@ -321,16 +574,16 @@
       }
     });
 
-    // Additional fallback: Check after a timeout
+    // Additional fallback: Check after timeout
     setTimeout(() => {
       if (!modelLoaded && modelViewer.loaded) {
         console.log('⚠️ Fallback: Model loaded but event missed');
         showARButton();
       } else if (!modelLoaded) {
-        console.error('❌ Model failed to load within 5 seconds');
-        loadingScreen.innerHTML += '<div style="color: red; margin-top: 20px; font-size: 14px;">⚠️ Model loading issue detected. Check console.</div>';
+        console.error('❌ Model failed to load within 8 seconds');
+        progressLabel.textContent = 'Loading taking longer than usual...';
       }
-    }, 5000);
+    }, 8000);
 
     // Handle AR Trigger
     arButton.addEventListener('click', () => {
@@ -360,7 +613,8 @@
     // Error handling
     modelViewer.addEventListener('error', (event) => {
       console.error('❌ Model error:', event.detail);
-      alert('Failed to load 3D model. Check console for details.');
+      progressLabel.textContent = 'Error loading model';
+      progressLabel.style.color = '#ff4444';
     });
 
     // AR session status
