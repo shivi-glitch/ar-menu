@@ -255,7 +255,7 @@
 
   <!-- AR Engine (Pre-loaded but hidden) -->
   <model-viewer src="dish.glb" ar ar-modes="scene-viewer quick-look webxr" ar-placement="floor" ar-scale="auto"
-    loading="eager" reveal="auto" exposure="1" shadow-intensity="0.8" touch-action="none" interaction-prompt="none"
+    loading="eager" reveal="auto" exposure="1" shadow-intensity="1" touch-action="none" interaction-prompt="none"
     style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none;">
   </model-viewer>
 
@@ -275,6 +275,10 @@
 
     const circumference = 2 * Math.PI * 52; // r = 52
     let modelLoaded = false;
+
+    // Disable environment lighting to show natural model materials only
+    modelViewer.environmentImage = null;
+    modelViewer.skyboxImage = null;
 
     // Function to show AR button
     function showARButton() {
